@@ -1,0 +1,6 @@
+@AngularNETAPIBlog_HostAddress = http://localhost:5201
+
+GET {{AngularNETAPIBlog_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
