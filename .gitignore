@@ -1,0 +1,14 @@
+
+*.vsidx
+API/AngularNETAPIBlog/AngularNETAPIBlog/obj/Debug/net8.0/.NETCoreApp,Version=v8.0.AssemblyAttributes.cs
+API/AngularNETAPIBlog/AngularNETAPIBlog/obj/Debug/net8.0/AngularNETAPIBlog.AssemblyInfo.cs
+API/AngularNETAPIBlog/AngularNETAPIBlog/obj/Debug/net8.0/AngularNETAPIBlog.AssemblyInfoInputs.cache
+API/AngularNETAPIBlog/AngularNETAPIBlog/obj/Debug/net8.0/AngularNETAPIBlog.assets.cache
+API/AngularNETAPIBlog/AngularNETAPIBlog/obj/Debug/net8.0/AngularNETAPIBlog.csproj.AssemblyReference.cache
+API/AngularNETAPIBlog/AngularNETAPIBlog/obj/Debug/net8.0/AngularNETAPIBlog.GeneratedMSBuildEditorConfig.editorconfig
+API/AngularNETAPIBlog/AngularNETAPIBlog/obj/Debug/net8.0/AngularNETAPIBlog.GlobalUsings.g.cs
+/API/AngularNETAPIBlog/AngularNETAPIBlog/bin/Debug/net8.0
+/API/AngularNETAPIBlog/.vs
+/API/AngularNETAPIBlog/AngularNETAPIBlog/obj
+/API/AngularNETAPIBlog/AngularNETAPIBlog/Controllers/WeatherForecastController.cs
+/API/AngularNETAPIBlog/AngularNETAPIBlog/WeatherForecast.cs
