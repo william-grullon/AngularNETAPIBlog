@@ -30,7 +30,7 @@ namespace AngularNETAPIBlog.API.Controllers
                 UrlHandle = request.UrlHandle
             };
 
-            await categoryRepository.GetCategoryAsync(category);
+            await categoryRepository.CreateCategoryAsync(category);
 
             // Domain Model to DTO
             var response = new CategoryDTO
@@ -39,6 +39,35 @@ namespace AngularNETAPIBlog.API.Controllers
                 Name = category.Name,
                 UrlHandle = category.UrlHandle
             };
+
+            return Ok(response);
+        }
+
+        // GET: http://localhost:5201/api/Categories
+        [HttpGet]
+        public async Task<IActionResult> GetAllCategories()
+        {
+            var categories = await categoryRepository.GetAllCategoriesAsync();
+
+            // Domain Model to DTO
+            var response = categories.Select(category => new CategoryDTO
+            {
+                Id = category.Id,
+                Name = category.Name,
+                UrlHandle = category.UrlHandle
+            });
+
+            // alternative Domain Model to DTO foreach loop
+            // var response = new List<CategoryDTO>();
+            // foreach (var category in categories)
+            // {
+            //     response.Add(new CategoryDTO
+            //     {                
+            //         Id = category.Id,                
+            //         Name = category.Name,                
+            //         UrlHandle = category.UrlHandle
+            //     });
+            // }                    
 
             return Ok(response);
         }

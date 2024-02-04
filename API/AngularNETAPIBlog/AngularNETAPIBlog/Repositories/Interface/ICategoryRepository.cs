@@ -4,6 +4,7 @@ namespace AngularNETAPIBlog.API.Repositories.Interface
 {
     public interface ICategoryRepository
     {
-        Task<Category> GetCategoryAsync(Category category);
+        Task<Category> CreateCategoryAsync(Category category);
+        Task<IEnumerable<Category>> GetAllCategoriesAsync();
     }
 }

@@ -14,12 +14,17 @@ namespace AngularNETAPIBlog.API.Repositories.Implementation
             this._dbContext = dbContext;
         }
 
-        public async Task<Category> GetCategoryAsync(Category category)
+        public async Task<Category> CreateCategoryAsync(Category category)
         {
             await _dbContext.Categories.AddAsync(category);
             await _dbContext.SaveChangesAsync();
 
             return category;
+        }
+
+        public async Task<IEnumerable<Category>> GetAllCategoriesAsync()
+        {
+            return await _dbContext.Categories.ToListAsync();
         }
     }
 }
