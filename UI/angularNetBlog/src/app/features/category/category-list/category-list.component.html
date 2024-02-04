@@ -6,7 +6,7 @@
         <a class="btn btn-primary" [routerLink]="['/admin/categories/add']">Add Category</a>        
     </div>
     
-    <ng-container *ngIf="categories">
+    <ng-container *ngIf="categories$ | async as categories">
     
         <table class="table table-bordered mt-3">
             <thead>
@@ -23,34 +23,12 @@
                     <td>{{ category.name }}</td>
                     <td>{{ category.urlHandle }}</td>
                     <td>
-                        <a class="btn btn-primary" [routerLink]="['/admin/categories/edit', category.id]">Edit</a>
+                        <a class="btn btn-outline-primary" [routerLink]="['/admin/categories/edit', category.id]">Edit</a>
                         <button class="btn btn-danger">Delete</button>
                     </td>
                 </tr>
             </tbody>
         </table>
     </ng-container>
-
-
-    <!-- <ng-container *ngIf="categories$ | async as categories">
-        <table class="table mt-3">
-            <thead>
-                <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let category of categories">
-                    <td>{{ category.id }}</td>
-                    <td>{{ category.name }}</td>
-                    <td>
-                        <a class="btn btn-primary" [routerLink]="['/admin/categories/edit', category.id]">Edit</a>
-                        <button class="btn btn-danger" (click)="deleteCategory(category.id)">Delete</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table> -->
 
 </div>
