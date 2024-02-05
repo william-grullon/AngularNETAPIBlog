@@ -8,5 +8,6 @@ namespace AngularNETAPIBlog.API.Repositories.Interface
         Task<IEnumerable<Category>> GetAllCategoriesAsync();
         Task<Category?> GetCategoryByIdAsync(Guid id);
         Task UpdateCategoryAsync(Category category);
+        Task DeleteCategoryAsync(Category category);
     }
 }

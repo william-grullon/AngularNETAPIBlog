@@ -37,5 +37,11 @@ namespace AngularNETAPIBlog.API.Repositories.Implementation
             _dbContext.Categories.Update(category);
             return _dbContext.SaveChangesAsync();
         }
+
+        public async Task DeleteCategoryAsync(Category category)
+        {
+            _dbContext.Categories.Remove(category);
+            await _dbContext.SaveChangesAsync();
+        }
     }
 }

@@ -126,5 +126,31 @@ namespace AngularNETAPIBlog.API.Controllers
 
             return Ok(response);
         }
+
+        // DELETE: http://localhost:5201/api/Categories/{id} from the route
+        [HttpDelete]
+        [Route("{id:Guid}")]
+        public async Task<IActionResult> DeleteCategory([FromRoute] Guid id)
+        {
+            var category = await categoryRepository.GetCategoryByIdAsync(id);
+
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            await categoryRepository.DeleteCategoryAsync(category);        
+            
+            // convert domain model to DTO
+            var response = new CategoryDTO
+            {
+                Id = category.Id,
+                Name = category.Name,
+                UrlHandle = category.UrlHandle
+            };
+
+            return Ok(response);
+        }
+        
     }
 }
