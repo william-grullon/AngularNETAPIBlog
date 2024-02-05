@@ -96,5 +96,35 @@ namespace AngularNETAPIBlog.API.Controllers
             return Ok(response);
             
         }
+
+        // PUT: http://localhost:5201/api/Categories/{id} from the route and the request body
+        [HttpPut]
+        [Route("{id:Guid}")]
+        public async Task<IActionResult> UpdateCategory([FromRoute] Guid id
+            , [FromBody] UpdateCategoryRequestDto request)
+        {
+            var category = await categoryRepository.GetCategoryByIdAsync(id);
+
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            // Map DTO to Domain Model
+            category.Name = request.Name;
+            category.UrlHandle = request.UrlHandle;
+
+            await categoryRepository.UpdateCategoryAsync(category);
+
+            // Domain Model to DTO
+            var response = new CategoryDTO
+            {
+                Id = category.Id,
+                Name = category.Name,
+                UrlHandle = category.UrlHandle
+            };
+
+            return Ok(response);
+        }
     }
 }

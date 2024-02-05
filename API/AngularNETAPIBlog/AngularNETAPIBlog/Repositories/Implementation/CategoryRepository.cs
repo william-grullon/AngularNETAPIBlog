@@ -31,5 +31,11 @@ namespace AngularNETAPIBlog.API.Repositories.Implementation
         {
             return _dbContext.Categories.FirstOrDefaultAsync(c => c.Id == id);
         }
+
+        Task ICategoryRepository.UpdateCategoryAsync(Category category)
+        {
+            _dbContext.Categories.Update(category);
+            return _dbContext.SaveChangesAsync();
+        }
     }
 }
