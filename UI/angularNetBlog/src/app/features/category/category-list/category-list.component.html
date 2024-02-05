@@ -14,7 +14,7 @@
                     <th scope="col">ID</th>
                     <th scope="col">Name</th>
                     <th scope="col">Url Handle</th>
-                    <th scope="col">Actions</th>
+                    <th scope="col">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -24,7 +24,6 @@
                     <td>{{ category.urlHandle }}</td>
                     <td>
                         <a class="btn btn-outline-primary" [routerLink]="['/admin/categories/edit', category.id]">Edit</a>
-                        <button class="btn btn-danger">Delete</button>
                     </td>
                 </tr>
             </tbody>
