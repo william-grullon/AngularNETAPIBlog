@@ -26,5 +26,10 @@ namespace AngularNETAPIBlog.API.Repositories.Implementation
         {
             return await _dbContext.Categories.ToListAsync();
         }
+
+        Task<Category?> ICategoryRepository.GetCategoryByIdAsync(Guid id)
+        {
+            return _dbContext.Categories.FirstOrDefaultAsync(c => c.Id == id);
+        }
     }
 }

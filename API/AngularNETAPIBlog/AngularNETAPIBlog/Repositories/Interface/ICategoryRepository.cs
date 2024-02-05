@@ -6,5 +6,6 @@ namespace AngularNETAPIBlog.API.Repositories.Interface
     {
         Task<Category> CreateCategoryAsync(Category category);
         Task<IEnumerable<Category>> GetAllCategoriesAsync();
+        Task<Category?> GetCategoryByIdAsync(Guid id);
     }
 }
