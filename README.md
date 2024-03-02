@@ -1,5 +1,7 @@
-Angular .NET Blog
-Tech used: 
+# Angular .NET Blog
+
+## Tech used: 
+
 Visual Studio 2022 Preview
 Node.js 
 NPM 
