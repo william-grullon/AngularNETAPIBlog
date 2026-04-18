@@ -4,9 +4,10 @@ import { BlogPost } from '../models/blog-post.model';
 import { BlogPostService } from '../services/blog-post.service';
 
 @Component({
-  selector: 'app-admin-post-list',
-  templateUrl: './admin-post-list.component.html',
-  styleUrls: ['./admin-post-list.component.css']
+    selector: 'app-admin-post-list',
+    templateUrl: './admin-post-list.component.html',
+    styleUrls: ['./admin-post-list.component.css'],
+    standalone: false
 })
 export class AdminPostListComponent implements OnInit {
   posts$?: Observable<BlogPost[]>;

@@ -6,9 +6,10 @@ import { BlogPostService } from '../services/blog-post.service';
 import { UpdateBlogPostRequest } from '../models/update-blog-post-request.model';
 
 @Component({
-  selector: 'app-edit-post',
-  templateUrl: './edit-post.component.html',
-  styleUrls: ['./edit-post.component.css']
+    selector: 'app-edit-post',
+    templateUrl: './edit-post.component.html',
+    styleUrls: ['./edit-post.component.css'],
+    standalone: false
 })
 export class EditPostComponent implements OnInit, OnDestroy {
   id: string | null = null;

@@ -4,9 +4,10 @@ import { BlogPostService } from '../services/blog-post.service';
 import { CreateBlogPostRequest } from '../models/create-blog-post-request.model';
 
 @Component({
-  selector: 'app-add-post',
-  templateUrl: './add-post.component.html',
-  styleUrls: ['./add-post.component.css']
+    selector: 'app-add-post',
+    templateUrl: './add-post.component.html',
+    styleUrls: ['./add-post.component.css'],
+    standalone: false
 })
 export class AddPostComponent implements OnDestroy {
   model: CreateBlogPostRequest;

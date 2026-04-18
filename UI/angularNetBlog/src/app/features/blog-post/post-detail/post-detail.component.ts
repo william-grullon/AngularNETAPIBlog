@@ -5,9 +5,10 @@ import { BlogPost } from '../models/blog-post.model';
 import { BlogPostService } from '../services/blog-post.service';
 
 @Component({
-  selector: 'app-post-detail',
-  templateUrl: './post-detail.component.html',
-  styleUrls: ['./post-detail.component.css']
+    selector: 'app-post-detail',
+    templateUrl: './post-detail.component.html',
+    styleUrls: ['./post-detail.component.css'],
+    standalone: false
 })
 export class PostDetailComponent implements OnInit, OnDestroy {
   post?: BlogPost;
