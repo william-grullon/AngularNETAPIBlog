@@ -2,6 +2,7 @@ using AngularNETAPIBlog.API.Models.DTO;
 using AngularNETAPIBlog.API.Repositories.Interface;
 using AngularNETAPIBlog.Models.Domain;
 using Microsoft.AspNetCore.Mvc;
+using Markdig;
 
 namespace AngularNETAPIBlog.API.Controllers
 {
@@ -111,6 +112,7 @@ namespace AngularNETAPIBlog.API.Controllers
                 Title = blogPost.Title,
                 ShortDescription = blogPost.ShortDescription,
                 Content = blogPost.Content,
+                ContentHtml = Markdown.ToHtml(blogPost.Content ?? string.Empty),
                 FeatureImageUrl = blogPost.FeatureImageUrl,
                 UrlHandle = blogPost.UrlHandle,
                 PublishedDate = blogPost.PublishedDate,

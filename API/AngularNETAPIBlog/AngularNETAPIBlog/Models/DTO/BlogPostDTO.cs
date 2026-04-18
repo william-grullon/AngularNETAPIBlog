@@ -6,6 +6,7 @@ namespace AngularNETAPIBlog.API.Models.DTO
         public string Title { get; set; } = string.Empty;
         public string ShortDescription { get; set; } = string.Empty;
         public string Content { get; set; } = string.Empty;
+        public string ContentHtml { get; set; } = string.Empty;
         public string FeatureImageUrl { get; set; } = string.Empty;
         public string UrlHandle { get; set; } = string.Empty;
         public DateTime PublishedDate { get; set; }

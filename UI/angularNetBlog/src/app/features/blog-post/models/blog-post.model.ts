@@ -3,6 +3,7 @@ export interface BlogPost {
   title: string;
   shortDescription: string;
   content: string;
+  contentHtml?: string;
   featureImageUrl: string;
   urlHandle: string;
   publishedDate: string;

@@ -6,7 +6,7 @@
         <p class="post-meta">{{ post.author }} | {{ post.publishedDate | date: 'mediumDate' }}</p>
         <h1>{{ post.title }}</h1>
         <p class="short-description">{{ post.shortDescription }}</p>
-        <div class="content">{{ post.content }}</div>
+        <div class="content" [innerHTML]="post.contentHtml || post.content"></div>
       </div>
     </article>
   </ng-container>

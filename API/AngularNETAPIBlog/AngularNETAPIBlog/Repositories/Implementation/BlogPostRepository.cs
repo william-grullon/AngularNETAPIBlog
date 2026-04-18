@@ -1,53 +1,168 @@
 using AngularNETAPIBlog.API.Repositories.Interface;
-using AngularNETAPIBlog.Data;
 using AngularNETAPIBlog.Models.Domain;
-using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 namespace AngularNETAPIBlog.API.Repositories.Implementation
 {
     public class BlogPostRepository : IBlogPostRepository
     {
-        private readonly ApplicationDbContext dbContext;
+        private readonly string postsDirectory;
 
-        public BlogPostRepository(ApplicationDbContext dbContext)
+        public BlogPostRepository(IWebHostEnvironment environment)
         {
-            this.dbContext = dbContext;
+            postsDirectory = Path.Combine(environment.ContentRootPath, "content", "posts");
+            Directory.CreateDirectory(postsDirectory);
         }
 
         public async Task<BlogPost> CreateBlogPostAsync(BlogPost blogPost)
         {
-            await dbContext.BlogPosts.AddAsync(blogPost);
-            await dbContext.SaveChangesAsync();
+            if (blogPost.Id == Guid.Empty)
+            {
+                blogPost.Id = Guid.NewGuid();
+            }
+
+            await File.WriteAllTextAsync(GetFilePath(blogPost.Id), BuildMarkdown(blogPost));
             return blogPost;
         }
 
         public async Task<IEnumerable<BlogPost>> GetAllBlogPostsAsync()
         {
-            return await dbContext.BlogPosts
+            var blogPosts = new List<BlogPost>();
+
+            foreach (var filePath in Directory.EnumerateFiles(postsDirectory, "*.md"))
+            {
+                blogPosts.Add(await ReadBlogPostAsync(filePath));
+            }
+
+            return blogPosts
                 .OrderByDescending(x => x.PublishedDate)
-                .ToListAsync();
+                .ThenByDescending(x => x.Title);
         }
 
-        public Task<BlogPost?> GetBlogPostByIdAsync(Guid id)
+        public async Task<BlogPost?> GetBlogPostByIdAsync(Guid id)
         {
-            return dbContext.BlogPosts.FirstOrDefaultAsync(x => x.Id == id);
+            var filePath = GetFilePath(id);
+            if (!File.Exists(filePath))
+            {
+                return null;
+            }
+
+            return await ReadBlogPostAsync(filePath);
         }
 
-        public Task<BlogPost?> GetBlogPostByUrlHandleAsync(string urlHandle)
+        public async Task<BlogPost?> GetBlogPostByUrlHandleAsync(string urlHandle)
         {
-            return dbContext.BlogPosts.FirstOrDefaultAsync(x => x.UrlHandle == urlHandle);
+            foreach (var filePath in Directory.EnumerateFiles(postsDirectory, "*.md"))
+            {
+                var blogPost = await ReadBlogPostAsync(filePath);
+                if (string.Equals(blogPost.UrlHandle, urlHandle, StringComparison.OrdinalIgnoreCase))
+                {
+                    return blogPost;
+                }
+            }
+
+            return null;
         }
 
-        public Task UpdateBlogPostAsync(BlogPost blogPost)
+        public async Task UpdateBlogPostAsync(BlogPost blogPost)
         {
-            dbContext.BlogPosts.Update(blogPost);
-            return dbContext.SaveChangesAsync();
+            await File.WriteAllTextAsync(GetFilePath(blogPost.Id), BuildMarkdown(blogPost));
         }
 
         public async Task DeleteBlogPostAsync(BlogPost blogPost)
         {
-            dbContext.BlogPosts.Remove(blogPost);
-            await dbContext.SaveChangesAsync();
+            var filePath = GetFilePath(blogPost.Id);
+            if (File.Exists(filePath))
+            {
+                File.Delete(filePath);
+            }
+        }
+
+        private async Task<BlogPost> ReadBlogPostAsync(string filePath)
+        {
+            var markdown = await File.ReadAllTextAsync(filePath);
+            return ParseBlogPost(markdown, Path.GetFileNameWithoutExtension(filePath));
+        }
+
+        private static BlogPost ParseBlogPost(string markdown, string? fallbackId = null)
+        {
+            var (frontMatter, body) = MarkdownFrontMatter.Parse(markdown);
+
+            return new BlogPost
+            {
+                Id = ParseGuid(frontMatter, "id", fallbackId),
+                Title = GetValue(frontMatter, "title"),
+                ShortDescription = GetValue(frontMatter, "shortDescription"),
+                Content = body,
+                FeatureImageUrl = GetValue(frontMatter, "featureImageUrl"),
+                UrlHandle = GetValue(frontMatter, "urlHandle"),
+                PublishedDate = ParseDate(frontMatter, "publishedDate"),
+                Author = GetValue(frontMatter, "author"),
+                IsVisible = ParseBool(frontMatter, "isVisible")
+            };
+        }
+
+        private static string BuildMarkdown(BlogPost blogPost)
+        {
+            var frontMatter = new Dictionary<string, string>
+            {
+                ["id"] = blogPost.Id.ToString(),
+                ["title"] = blogPost.Title,
+                ["shortDescription"] = blogPost.ShortDescription,
+                ["featureImageUrl"] = blogPost.FeatureImageUrl,
+                ["urlHandle"] = blogPost.UrlHandle,
+                ["publishedDate"] = blogPost.PublishedDate.ToUniversalTime().ToString("O", CultureInfo.InvariantCulture),
+                ["author"] = blogPost.Author,
+                ["isVisible"] = blogPost.IsVisible.ToString().ToLowerInvariant()
+            };
+
+            return MarkdownFrontMatter.Build(frontMatter, blogPost.Content);
+        }
+
+        private string GetFilePath(Guid id)
+        {
+            return Path.Combine(postsDirectory, $"{id}.md");
+        }
+
+        private static string GetValue(IReadOnlyDictionary<string, string> frontMatter, string key)
+        {
+            return frontMatter.TryGetValue(key, out var value) ? value : string.Empty;
+        }
+
+        private static Guid ParseGuid(IReadOnlyDictionary<string, string> frontMatter, string key, string? fallbackId)
+        {
+            if (frontMatter.TryGetValue(key, out var value) && Guid.TryParse(value, out var parsed))
+            {
+                return parsed;
+            }
+
+            if (Guid.TryParse(fallbackId, out parsed))
+            {
+                return parsed;
+            }
+
+            return Guid.Empty;
+        }
+
+        private static DateTime ParseDate(IReadOnlyDictionary<string, string> frontMatter, string key)
+        {
+            if (frontMatter.TryGetValue(key, out var value) &&
+                DateTime.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind, out var parsed))
+            {
+                return parsed;
+            }
+
+            return DateTime.UtcNow;
+        }
+
+        private static bool ParseBool(IReadOnlyDictionary<string, string> frontMatter, string key)
+        {
+            if (frontMatter.TryGetValue(key, out var value) && bool.TryParse(value, out var parsed))
+            {
+                return parsed;
+            }
+
+            return false;
         }
     }
 }

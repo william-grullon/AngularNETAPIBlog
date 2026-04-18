@@ -1,7 +1,5 @@
 using AngularNETAPIBlog.API.Repositories.Implementation;
 using AngularNETAPIBlog.API.Repositories.Interface;
-using AngularNETAPIBlog.Data;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,22 +10,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-{
-    options.UseSqlServer(builder.Configuration.GetConnectionString("BlogConnectionString"));
-});
-
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IBlogPostRepository, BlogPostRepository>();
 
 var app = builder.Build();
-
-using (var scope = app.Services.CreateScope())
-{
-    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    await dbContext.Database.MigrateAsync();
-    await BlogSeedData.SeedAsync(dbContext);
-}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
