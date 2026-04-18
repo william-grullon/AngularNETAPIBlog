@@ -2,13 +2,13 @@ namespace AngularNETAPIBlog.API.Models.DTO
 {
     public class CreateBlogPostRequestDto
     {
-        public string Title { get; set; }
-        public string ShortDescription { get; set; }
-        public string Content { get; set; }
-        public string FeatureImageUrl { get; set; }
-        public string UrlHandle { get; set; }
+        public string Title { get; set; } = string.Empty;
+        public string ShortDescription { get; set; } = string.Empty;
+        public string Content { get; set; } = string.Empty;
+        public string FeatureImageUrl { get; set; } = string.Empty;
+        public string UrlHandle { get; set; } = string.Empty;
         public DateTime PublishedDate { get; set; }
-        public string Author { get; set; }
+        public string Author { get; set; } = string.Empty;
         public bool IsVisible { get; set; }
     }
 }
