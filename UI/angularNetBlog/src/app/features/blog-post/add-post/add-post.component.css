@@ -21,3 +21,9 @@
   font-family: 'Fraunces', Georgia, serif;
   margin-bottom: 1.5rem;
 }
+
+.alert-success {
+  border-color: rgba(25, 135, 84, 0.2);
+  background: rgba(25, 135, 84, 0.08);
+  color: #146c43;
+}
