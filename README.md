@@ -4,7 +4,8 @@ A full-stack blog application built with an Angular frontend and an ASP.NET Core
 
 ## Overview
 
-- Frontend: Angular 16 + TypeScript
+- Frontend: Angular 20 + TypeScript
+- Frontend build system: Angular application builder
 - Backend: ASP.NET Core Web API on .NET 8
 - Content storage: Markdown files under the API project
 - API docs: Swagger/OpenAPI
@@ -71,6 +72,7 @@ The frontend runs at:
 - `http://localhost:4200`
 
 During development, the Angular proxy configuration forwards `/api` requests to the API at `http://localhost:5201`.
+The UI now uses Angular's newer application builder, so `npm start` and `npm run build` both use the migrated build system.
 
 ## What It Does
 
