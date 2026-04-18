@@ -1,6 +1,7 @@
 using AngularNETAPIBlog.API.Repositories.Interface;
 using AngularNETAPIBlog.Models.Domain;
 using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace AngularNETAPIBlog.API.Repositories.Implementation
 {
@@ -21,7 +22,7 @@ namespace AngularNETAPIBlog.API.Repositories.Implementation
                 blogPost.Id = Guid.NewGuid();
             }
 
-            await File.WriteAllTextAsync(GetFilePath(blogPost.Id), BuildMarkdown(blogPost));
+            await SaveBlogPostAsync(blogPost);
             return blogPost;
         }
 
@@ -41,8 +42,8 @@ namespace AngularNETAPIBlog.API.Repositories.Implementation
 
         public async Task<BlogPost?> GetBlogPostByIdAsync(Guid id)
         {
-            var filePath = GetFilePath(id);
-            if (!File.Exists(filePath))
+            var filePath = await FindFilePathByIdAsync(id);
+            if (filePath is null)
             {
                 return null;
             }
@@ -66,22 +67,48 @@ namespace AngularNETAPIBlog.API.Repositories.Implementation
 
         public async Task UpdateBlogPostAsync(BlogPost blogPost)
         {
-            await File.WriteAllTextAsync(GetFilePath(blogPost.Id), BuildMarkdown(blogPost));
+            await SaveBlogPostAsync(blogPost);
         }
 
         public async Task DeleteBlogPostAsync(BlogPost blogPost)
         {
-            var filePath = GetFilePath(blogPost.Id);
-            if (File.Exists(filePath))
+            var filePath = await FindFilePathByIdAsync(blogPost.Id);
+            if (filePath is not null && File.Exists(filePath))
             {
                 File.Delete(filePath);
             }
+        }
+
+        private async Task SaveBlogPostAsync(BlogPost blogPost)
+        {
+            var existingFilePath = await FindFilePathByIdAsync(blogPost.Id);
+            if (existingFilePath is not null && File.Exists(existingFilePath))
+            {
+                File.Delete(existingFilePath);
+            }
+
+            await File.WriteAllTextAsync(GetFilePath(blogPost), BuildMarkdown(blogPost));
         }
 
         private async Task<BlogPost> ReadBlogPostAsync(string filePath)
         {
             var markdown = await File.ReadAllTextAsync(filePath);
             return ParseBlogPost(markdown, Path.GetFileNameWithoutExtension(filePath));
+        }
+
+        private async Task<string?> FindFilePathByIdAsync(Guid id)
+        {
+            foreach (var filePath in Directory.EnumerateFiles(postsDirectory, "*.md"))
+            {
+                var markdown = await File.ReadAllTextAsync(filePath);
+                var (frontMatter, _) = MarkdownFrontMatter.Parse(markdown);
+                if (ParseGuid(frontMatter, "id", null) == id)
+                {
+                    return filePath;
+                }
+            }
+
+            return null;
         }
 
         private static BlogPost ParseBlogPost(string markdown, string? fallbackId = null)
@@ -102,6 +129,13 @@ namespace AngularNETAPIBlog.API.Repositories.Implementation
             };
         }
 
+        private string GetFilePath(BlogPost blogPost)
+        {
+            var timestamp = blogPost.PublishedDate.ToUniversalTime().ToString("yyyy-MM-dd-HHmmss", CultureInfo.InvariantCulture);
+            var slug = Slugify(blogPost.UrlHandle);
+            return Path.Combine(postsDirectory, $"{timestamp}--{slug}--{blogPost.Id}.md");
+        }
+
         private static string BuildMarkdown(BlogPost blogPost)
         {
             var frontMatter = new Dictionary<string, string>
@@ -117,11 +151,6 @@ namespace AngularNETAPIBlog.API.Repositories.Implementation
             };
 
             return MarkdownFrontMatter.Build(frontMatter, blogPost.Content);
-        }
-
-        private string GetFilePath(Guid id)
-        {
-            return Path.Combine(postsDirectory, $"{id}.md");
         }
 
         private static string GetValue(IReadOnlyDictionary<string, string> frontMatter, string key)
@@ -163,6 +192,14 @@ namespace AngularNETAPIBlog.API.Repositories.Implementation
             }
 
             return false;
+        }
+
+        private static string Slugify(string value)
+        {
+            var slug = value.Trim().ToLowerInvariant();
+            slug = Regex.Replace(slug, @"[^a-z0-9]+", "-");
+            slug = Regex.Replace(slug, @"-+", "-").Trim('-');
+            return string.IsNullOrWhiteSpace(slug) ? "post" : slug;
         }
     }
 }
