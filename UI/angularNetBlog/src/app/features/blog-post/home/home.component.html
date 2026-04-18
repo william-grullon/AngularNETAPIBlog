@@ -1,0 +1,52 @@
+<section class="hero">
+  <div class="container hero-inner">
+    <div class="hero-copy">
+      <p class="eyebrow">Angular + .NET 8</p>
+      <h1>Learning project, finished as a real blog.</h1>
+      <p class="lead">
+        A simple publishing stack with category management, blog post CRUD, and a public reading experience.
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-dark btn-lg" routerLink="/admin/posts">Manage posts</a>
+        <a class="btn btn-outline-dark btn-lg" routerLink="/admin/categories">Manage categories</a>
+      </div>
+    </div>
+
+    <div class="hero-card">
+      <h2>What is live now</h2>
+      <ul>
+        <li>Category admin flow</li>
+        <li>Blog post API and admin CRUD</li>
+        <li>Public home page and detail pages</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="container content-section">
+  <div class="section-heading">
+    <h2>Latest posts</h2>
+    <p>Visible posts ordered by publish date.</p>
+  </div>
+
+  <ng-container *ngIf="posts$ | async as posts">
+    <div *ngIf="posts.length > 0; else emptyState" class="post-grid">
+      <article class="post-card" *ngFor="let post of posts">
+        <div class="post-meta">
+          <span>{{ post.author }}</span>
+          <span>{{ post.publishedDate | date: 'mediumDate' }}</span>
+        </div>
+        <h3>{{ post.title }}</h3>
+        <p>{{ post.shortDescription }}</p>
+        <a class="read-more" [routerLink]="['/blog', post.urlHandle]">Read post</a>
+      </article>
+    </div>
+  </ng-container>
+
+  <ng-template #emptyState>
+    <div class="empty-state">
+      <h3>No published posts yet.</h3>
+      <p>Add your first blog post from the admin area to bring the site to life.</p>
+    </div>
+  </ng-template>
+</section>

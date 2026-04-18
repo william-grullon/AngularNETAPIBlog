@@ -1,0 +1,21 @@
+<section class="container post-shell">
+  <ng-container *ngIf="post; else notFound">
+    <article class="post-article">
+      <img *ngIf="post.featureImageUrl" [src]="post.featureImageUrl" [alt]="post.title" class="post-image" />
+      <div class="post-content">
+        <p class="post-meta">{{ post.author }} | {{ post.publishedDate | date: 'mediumDate' }}</p>
+        <h1>{{ post.title }}</h1>
+        <p class="short-description">{{ post.shortDescription }}</p>
+        <div class="content">{{ post.content }}</div>
+      </div>
+    </article>
+  </ng-container>
+
+  <ng-template #notFound>
+    <div class="empty-state">
+      <h2>Post not found</h2>
+      <p>The blog post you requested is not available.</p>
+      <a class="btn btn-dark" routerLink="/">Back home</a>
+    </div>
+  </ng-template>
+</section>

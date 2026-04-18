@@ -1,0 +1,55 @@
+<div class="container form-shell">
+  <div class="form-card">
+    <p class="eyebrow">Admin</p>
+    <h1>Edit Post</h1>
+
+    <ng-container *ngIf="post; else notFound">
+      <form #form="ngForm" (ngSubmit)="onFormSubmit()">
+        <div class="row g-3">
+          <div class="col-12">
+            <label class="form-label" for="title">Title</label>
+            <input id="title" class="form-control" name="title" [(ngModel)]="post.title" />
+          </div>
+          <div class="col-12">
+            <label class="form-label" for="shortDescription">Short Description</label>
+            <textarea id="shortDescription" class="form-control" rows="3" name="shortDescription" [(ngModel)]="post.shortDescription"></textarea>
+          </div>
+          <div class="col-12">
+            <label class="form-label" for="content">Content</label>
+            <textarea id="content" class="form-control" rows="10" name="content" [(ngModel)]="post.content"></textarea>
+          </div>
+          <div class="col-12 col-md-6">
+            <label class="form-label" for="featureImageUrl">Feature Image URL</label>
+            <input id="featureImageUrl" class="form-control" name="featureImageUrl" [(ngModel)]="post.featureImageUrl" />
+          </div>
+          <div class="col-12 col-md-6">
+            <label class="form-label" for="urlHandle">URL Handle</label>
+            <input id="urlHandle" class="form-control" name="urlHandle" [(ngModel)]="post.urlHandle" />
+          </div>
+          <div class="col-12 col-md-6">
+            <label class="form-label" for="publishedDate">Published Date</label>
+            <input id="publishedDate" class="form-control" type="datetime-local" name="publishedDate" [(ngModel)]="post.publishedDate" />
+          </div>
+          <div class="col-12 col-md-6">
+            <label class="form-label" for="author">Author</label>
+            <input id="author" class="form-control" name="author" [(ngModel)]="post.author" />
+          </div>
+          <div class="col-12">
+            <div class="form-check">
+              <input id="isVisible" class="form-check-input" type="checkbox" name="isVisible" [(ngModel)]="post.isVisible" />
+              <label class="form-check-label" for="isVisible">Visible on the public site</label>
+            </div>
+          </div>
+          <div class="col-12">
+            <button type="submit" class="btn btn-primary">Update Post</button>
+            <button type="button" class="btn btn-danger ms-3" (click)="onDelete()">Delete</button>
+          </div>
+        </div>
+      </form>
+    </ng-container>
+
+    <ng-template #notFound>
+      <div class="alert alert-warning mt-3">Post not found.</div>
+    </ng-template>
+  </div>
+</div>

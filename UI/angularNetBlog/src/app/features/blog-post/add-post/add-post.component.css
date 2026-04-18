@@ -1,0 +1,23 @@
+.form-shell {
+  padding: 2rem 0 4rem;
+}
+
+.form-card {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 1.5rem;
+  padding: 2rem;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.08);
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-size: 0.75rem;
+  color: #0f766e;
+  font-weight: 700;
+}
+
+.form-card h1 {
+  font-family: 'Fraunces', Georgia, serif;
+  margin-bottom: 1.5rem;
+}

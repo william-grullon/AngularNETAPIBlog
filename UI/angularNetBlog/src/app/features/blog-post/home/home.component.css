@@ -1,0 +1,136 @@
+.hero {
+  padding: 4rem 0 2rem;
+}
+
+.hero-inner {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 1.5rem;
+  align-items: stretch;
+}
+
+.hero-copy,
+.hero-card,
+.post-card,
+.empty-state {
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 1.5rem;
+  background: rgba(255, 255, 255, 0.86);
+  backdrop-filter: blur(18px);
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.08);
+}
+
+.hero-copy {
+  padding: 3rem;
+}
+
+.hero-card {
+  padding: 2rem;
+  align-self: center;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #0f766e;
+  margin-bottom: 1rem;
+}
+
+.hero h1 {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: clamp(2.6rem, 6vw, 4.8rem);
+  line-height: 0.95;
+  margin-bottom: 1rem;
+}
+
+.lead {
+  font-size: 1.1rem;
+  color: #334155;
+  max-width: 42rem;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+
+.content-section {
+  padding-bottom: 4rem;
+}
+
+.section-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.section-heading h2 {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 2rem;
+  margin: 0;
+}
+
+.section-heading p {
+  margin: 0;
+  color: #64748b;
+}
+
+.post-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.post-card {
+  padding: 1.5rem;
+  min-height: 240px;
+}
+
+.post-card h3 {
+  font-family: 'Fraunces', Georgia, serif;
+  margin: 0.75rem 0;
+  font-size: 1.5rem;
+}
+
+.post-card p,
+.hero-card li {
+  color: #475569;
+}
+
+.post-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+.read-more {
+  display: inline-flex;
+  margin-top: 1rem;
+  color: #0f766e;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.empty-state {
+  padding: 2rem;
+}
+
+@media (max-width: 992px) {
+  .hero-inner,
+  .post-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .section-heading {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
